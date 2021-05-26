@@ -113,7 +113,7 @@ jobs:
       - run: flutter doctor -v
       - name: Checkout gallery code
         uses: actions/checkout@v2
-      - run: flutter create .
+      - run: flutter create --org com.redsoc.cowin_vaccination_alert .
       - run: flutter pub get
 
       - name: Configure Keystore for Android
