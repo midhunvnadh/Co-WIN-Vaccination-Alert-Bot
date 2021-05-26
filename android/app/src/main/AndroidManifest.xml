@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.cowin_vaccination_bot">
+    package="com.redsoc.cowin_vaccination_alert">
    <application
         android:label="CoWIN Vaccination Bot"
         android:icon="@mipmap/ic_launcher">

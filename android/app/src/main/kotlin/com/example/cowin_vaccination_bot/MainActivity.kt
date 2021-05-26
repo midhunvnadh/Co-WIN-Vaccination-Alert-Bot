@@ -1,4 +1,4 @@
-package com.example.cowin_vaccination_bot
+package com.redsoc.cowin_vaccination_alert
 
 import io.flutter.embedding.android.FlutterActivity
 
