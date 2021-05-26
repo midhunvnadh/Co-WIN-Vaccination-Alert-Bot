@@ -1,0 +1,10 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "cowin_vaccination_bot",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
