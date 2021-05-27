@@ -39,12 +39,37 @@ Future<List> getVaccinationCenters(districtId) async {
 
   var response = await http.get(uri);
   if (response.statusCode == 200) {
-    List responseContent = json.decode(response.body)["centers"];
+    List responseContent =
+        await sortClosestVC(json.decode(response.body)["centers"]);
     return responseContent;
   } else {
     await sleep(60);
     return getVaccinationCenters(districtId);
   }
+}
+
+Future<List> sortClosestVC(List centers) async {
+  var selfPin = await getSettings();
+  int pin = int.parse(selfPin["pinCode"]);
+  List newList = [];
+  for (int i = 0; i < centers.length; i++) {
+    Map center = centers[i];
+    num closer = (pin - center["pincode"]).abs();
+    Map newData = {"closer": closer, "center": center};
+    newList.add(newData);
+  }
+  newList.sort((m1, m2) {
+    var r = m1["closer"].compareTo(m2["closer"]);
+    if (r != 0) return r;
+    return m1["closer"].compareTo(m2["closer"]);
+  });
+  List finalList = [];
+  for (int i = 0; i < newList.length; i++) {
+    Map entry = newList[i];
+    Map newData = entry["center"];
+    finalList.add(newData);
+  }
+  return finalList;
 }
 
 int getIdFromList(

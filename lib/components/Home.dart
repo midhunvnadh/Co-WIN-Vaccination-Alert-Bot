@@ -1,9 +1,7 @@
 import "package:flutter/material.dart";
-import 'package:shared_preferences/shared_preferences.dart';
 import "../misc/loading.dart";
 import "BotActivity.dart";
 import "../functions.dart";
-import "dart:developer" as dev;
 
 class Home extends StatefulWidget {
   final String title;
