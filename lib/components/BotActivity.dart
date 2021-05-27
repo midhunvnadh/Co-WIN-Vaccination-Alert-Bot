@@ -130,9 +130,7 @@ class _BotActivity extends State<BotActivity> {
           icon: const Icon(Icons.settings),
           color: Colors.white,
           onPressed: () async {
-            final prefs = await SharedPreferences.getInstance();
-            prefs.remove("districtId");
-            prefs.remove("stateId");
+            deleteSettings();
             Navigator.of(context)
                 .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
           },

@@ -58,10 +58,25 @@ int getIdFromList(
   return -1;
 }
 
-void setSettings(stateId, districtId) async {
+void setSettings(args) async {
+  String settings = json.encode(args);
   final prefs = await SharedPreferences.getInstance();
-  prefs.setInt('stateId', stateId);
-  prefs.setInt('districtId', districtId);
+  prefs.setString('settings', settings);
+}
+
+void deleteSettings() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.clear();
+}
+
+Future<Map> getSettings() async {
+  final prefs = await SharedPreferences.getInstance();
+  String? tkval = prefs.getString("settings");
+  if ((tkval == null)) {
+    return {'setup': false};
+  }
+  String settings = tkval;
+  return json.decode(settings);
 }
 
 sleep(n) async {

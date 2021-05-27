@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import "../misc/loading.dart";
 import "BotActivity.dart";
+import "../functions.dart";
+import "dart:developer" as dev;
 
 class Home extends StatefulWidget {
   final String title;
@@ -18,18 +20,10 @@ class _HomeActivity extends State<Home> {
   int districtId = 0;
 
   Future refeshAppConfig() async {
-    final prefs = await SharedPreferences.getInstance();
-    final stateIdio = prefs.getInt('stateId') ?? 0;
-    final districtIdio = prefs.getInt('districtId') ?? 0;
-    districtId = districtIdio;
-    bool status;
-    if (stateIdio != 0 && districtIdio != 0) {
-      status = false;
-    } else {
-      status = true;
-    }
+    Map settings = await getSettings();
     setState(() {
-      appSetupNeeded = status;
+      appSetupNeeded = !settings["setup"];
+      if (settings["setup"]) districtId = settings["districtId"];
       loaded = true;
     });
   }
@@ -77,7 +71,7 @@ class BotSetup extends StatelessWidget {
         Padding(
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/states');
+              Navigator.pushNamed(context, '/setup');
             },
             child: Padding(
               child: Text('Setup', style: TextStyle(fontSize: 26)),
