@@ -22,19 +22,20 @@ class _BotActivity extends State<BotActivity> {
   String lastUpdated = "";
 
   void updateResponse(districtId) async {
-    List resp = await getVaccinationCenters(districtId);
-    if (mounted)
+    if (mounted) {
+      List resp = await getVaccinationCenters(districtId);
       setState(() {
         lastUpdated = getCurrentTime("hh:mm:ss a dd-MM-yyyy");
         response = resp;
         loaded = true;
       });
+    }
   }
 
   Timer _timer() {
     updateResponse(districtId);
     Timer refresh = Timer.periodic(new Duration(seconds: 15), (refresh) {
-      updateResponse(districtId);
+      if (mounted) updateResponse(districtId);
       if (!mounted) refresh.cancel();
     });
     return refresh;
@@ -214,7 +215,7 @@ class CustomCard extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Column(
                               children: [
@@ -251,9 +252,7 @@ class CustomCard extends StatelessWidget {
                                   color: Colors.white,
                                   onPressed: () {},
                                 ),
-                                Text(
-                                    availableCapacity.toString() +
-                                        " Slots left",
+                                Text(availableCapacity.toString() + " left",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold))

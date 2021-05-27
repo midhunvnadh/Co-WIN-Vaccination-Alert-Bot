@@ -49,8 +49,11 @@ Future<List> getVaccinationCenters(districtId) async {
 }
 
 Future<List> sortClosestVC(List centers) async {
-  var selfPin = await getSettings();
-  int pin = int.parse(selfPin["pinCode"]);
+  var settings = await getSettings();
+  int pin = 0;
+  if (settings["setup"]) {
+    pin = int.parse(settings["pinCode"]);
+  }
   List newList = [];
   for (int i = 0; i < centers.length; i++) {
     Map center = centers[i];
