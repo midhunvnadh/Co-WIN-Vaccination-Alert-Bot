@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../functions.dart';
 import "../misc/loading.dart";
+import "./notification.dart";
 
 class BotActivity extends StatefulWidget {
   final String title;
@@ -14,14 +15,15 @@ class BotActivity extends StatefulWidget {
 class _BotActivity extends State<BotActivity> {
   final title;
   int districtId;
+
   _BotActivity(this.title, this.districtId);
 
   List response = [];
   bool showFilled = false;
   bool loaded = false;
   String lastUpdated = "";
-
-  void updateResponse(districtId) async {
+  int lastVaccinationCentersAmount = 0;
+  void updateResponse(districtId, Notifications notifications) async {
     if (mounted) {
       List resp = await getVaccinationCenters(districtId);
       setState(() {
@@ -29,13 +31,21 @@ class _BotActivity extends State<BotActivity> {
         response = resp;
         loaded = true;
       });
+      List available = filterAsAvailableCenters(response, false);
+      notifications.setContext(context);
+      if (available.length > 0 &&
+          lastVaccinationCentersAmount != available.length) {
+        notifications.showNtf("Vaccination centers available",
+            "${available.length} vaccination centers available");
+      }
+      lastVaccinationCentersAmount = available.length;
     }
   }
 
-  Timer _timer() {
-    updateResponse(districtId);
+  Timer _timer(Notifications notifications) {
+    updateResponse(districtId, notifications);
     Timer refresh = Timer.periodic(new Duration(seconds: 15), (refresh) {
-      if (mounted) updateResponse(districtId);
+      if (mounted) updateResponse(districtId, notifications);
       if (!mounted) refresh.cancel();
     });
     return refresh;
@@ -44,7 +54,8 @@ class _BotActivity extends State<BotActivity> {
   @override
   void initState() {
     super.initState();
-    _timer();
+    Notifications notifications = Notifications(context);
+    _timer(notifications);
   }
 
   @override
@@ -189,9 +200,7 @@ class CustomCard extends StatelessWidget {
               : Colors.blue.shade400,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
-            onTap: () {
-              print('Card tapped.');
-            },
+            onTap: () {},
             child: Container(
               child: Padding(
                   child: Column(
@@ -264,7 +273,7 @@ class CustomCard extends StatelessWidget {
                       Container(
                           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                           child: Text(
-                            excerpt(center["address"], 90),
+                            excerpt(center["address"], 58),
                             style: TextStyle(color: Colors.white),
                           )),
                     ],
