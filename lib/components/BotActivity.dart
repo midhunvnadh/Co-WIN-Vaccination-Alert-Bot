@@ -3,6 +3,7 @@ import 'dart:async';
 import '../functions.dart';
 import "../misc/loading.dart";
 import "./notification.dart";
+import "./ViewCenterDetails.dart";
 
 class BotActivity extends StatefulWidget {
   final String title;
@@ -200,7 +201,12 @@ class CustomCard extends StatelessWidget {
               : Colors.blue.shade400,
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ViewCenterDetails(center)),
+              );
+            },
             child: Container(
               child: Padding(
                   child: Column(
@@ -209,7 +215,7 @@ class CustomCard extends StatelessWidget {
                     children: [
                       Container(
                         height: 80,
-                        child: Text(excerpt(center["name"], 32),
+                        child: Text(excerpt(center["name"], 25),
                             style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
